@@ -1,0 +1,119 @@
+{% extends "core/base.html" %} {% block content %}
+<link
+  rel="stylesheet prefetch"
+  href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.min.css"
+/>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+<body>
+  <a href="analysis1"><button type="button" class="btn btn-primary" style="float: right;">Get Detailed Analysis</button></a>
+  <h2>{{info.longName}} ({{info.symbol}})</h2>
+
+
+  <div class="card-deck" style="font-size: small">
+    <div class="card">
+      <div class="card-body">
+        <p class="card-text">52WH : {{info.fiftyTwoWeekHigh}}</p>
+        <p class="card-text">52WL : {{info.fiftyTwoWeekLow}}</p>
+        <p class="card-text">DH : {{info.dayHigh}}</p>
+        <p class="card-text">DL : {{info.dayLow}}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <p class="card-text">Avg. Vol : {{info.averageVolume}}</p>
+        <p class="card-text">10D Avg. Vol : {{info.averageVolume10days}}</p>
+        <p class="card-text">50D Avg. Vol : {{info.fiftyDayAverage}}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <p class="card-text">Open : {{info.open}}</p>
+        <p class="card-text">Close : {{info.close}}</p>
+        <p class="card-text">Volume : {{info.volume}}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <p class="card-text">P/E Ratio : {{info3}}</p>
+        <p class="card-text">EPS : {{info4}}</p>
+        <p class="card-text">Trailing Eps : {{info5}}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <p class="card-text">ROE : {{ROE}}%</p>
+        <p class="card-text">RSI : {{rsi}}</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <p class="card-text">EMA 20 : <span id="ema20">{{EMA20}}</span></p>
+        <p class="card-text">
+          EMA 50: <span style="color: orange">{{EMA50}}</span>
+        </p>
+        <p class="card-text">
+          EMA 200: <span style="color: red">{{EMA200}}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+  {% autoescape off %} {{ plot_div }} {{ plot_pie }} {% endautoescape %}
+  <h1>Table <datagrid></datagrid></h1>
+  <table
+    id="table"
+    data-toggle="table"
+    data-pagination="true"
+    data-search="true"
+    data-filter-control="true"
+    data-click-to-select="true"
+    data-toolbar="#toolbar"
+    class="table-responsive"
+  >
+    <thead>
+      <tr>
+        <th data-sortable="true">Year</th>
+        <th data-sortable="true">Net Profit</th>
+        <th data-sortable="true">Sales</th>
+        <th data-sortable="true">EPS</th>
+        <th data-sortable="true">Debt/Equity</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for key, values in financial_dataframe.items %}
+      <tr>
+        <td data-label="key">{{values.Year}}</td>
+        <td data-label="key">{{values.NetProfit}}</td>
+        <td data-label="key">{{values.Sales}}</td>
+        <td data-label="key">{{values.EPS}}</td>
+        <td data-label="key">{{values.DE}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <script>
+    var $table = $("#table");
+    $(function () {
+      $("#toolbar")
+        .find("select")
+        .change(function () {
+          $table.bootstrapTable("destroy").bootstrapTable({
+            exportDataType: $(this).val(),
+            exportTypes: ["json", "xml", "csv", "txt", "sql", "excel", "pdf"],
+          });
+        });
+    });
+
+    var trBoldBlue = $("table");
+
+    $(trBoldBlue).on("click", "tr", function () {
+      $(this).toggleClass("bold-blue");
+    });
+  </script>
+</body>
+{% endblock %}

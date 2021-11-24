@@ -1,0 +1,256 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1, shrink-to-fit=no"
+		/>
+
+		<!-- Bootstrap CSS -->
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+			integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+			crossorigin="anonymous"
+		/>
+
+		<link rel="icon" type="image/png" href="#" />
+		<style>
+			.bg-warning {
+				background-color: #01a566 !important;
+			}
+			.bg-body {
+				font: Open Sans;
+				background-color: #bfffd7 !important;
+			}
+			.nav-font {
+				font-weight: bold;
+			}
+			li.border {
+				border-width: 2px !important;
+			}
+		</style>
+		<title>Happy Investing</title>
+	</head>
+
+	<body class="bg-body">
+		<nav
+			class="
+				navbar navbar-expand-xl navbar-dark
+				bg-warning
+				nav-font
+				m-2
+				border
+				rounded
+			"
+		>
+			<!-- <div class="container"> -->
+			<img
+				src="{% static 'core/logo.png' %}"
+				width="60"
+				height="60"
+				class="d-inline-block align-top"
+			/>
+			<a class="navbar-brand ml-2" href="{% url 'home' %}">
+				<h3>Stock the Stock</h3>
+			</a>
+			<button
+				class="navbar-toggler"
+				type="button"
+				data-toggle="collapse"
+				data-target="#navbarNav"
+				aria-controls="navbarNav"
+				aria-expanded="false"
+				aria-label="Toggle navigation"
+			>
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="#"
+							>Today, {{ date }} <span class="sr-only">(current)</span></a
+						>
+					</li>
+				</ul>
+				<ul class="navbar-nav ml-auto">
+					{% if user.is_authenticated %} {% if plan %}
+					<li class="nav-item mx-2">
+						<a href="{% url 'premium' %}" class="nav-link">My Plans</a>
+					</li>
+					{% else %}
+					<li class="nav-item mx-2">
+						<a href="{% url 'premium' %}" class="nav-link">Get Premium</a>
+					</li>
+					{% endif %}
+					<li class="nav-item mx-2">
+						<a href="{% url 'global_indices' %}" class="nav-link"
+							>Global Indices</a
+						>
+					</li>
+					<li class="nav-item mx-2">
+						<a href="{% url 'stockdata' %}" class="nav-link">Stockdata</a>
+					</li>
+					<li class="nav-item dropdown">
+						<a
+							class="nav-link dropdown-toggle"
+							href="#"
+							id="navbarDropdown"
+							role="button"
+							data-toggle="dropdown"
+							aria-haspopup="false"
+							aria-expanded="true"
+						>
+							Sector-Wise Analysis
+						</a>
+						<div
+							class="dropdown-menu dropdown-menu-right"
+							aria-labelledby="navbarDropdown"
+						>
+							<a
+								href="{% url 'analysis2' 'HEALTHCARE SERVICES' %}"
+								class="dropdown-item"
+								>HEALTHCARE SERVICES</a
+							>
+							<a
+								href="{% url 'analysis2' 'INDUSTRIAL MANUFACTURING' %} "
+								class="dropdown-item"
+								>INDUSTRIAL MANUFACTURING</a
+							>
+							<a href="{% url 'analysis2' 'AUTOMOBILE' %}" class="dropdown-item"
+								>AUTOMOBILE</a
+							>
+							<a
+								href="{% url 'analysis2' 'FINANCIAL SERVICES' %} "
+								class="dropdown-item"
+								>FINANCIAL SERVICES</a
+							>
+							<a
+								href="{% url 'analysis2' 'CONSUMER GOODS' %} "
+								class="dropdown-item"
+								>CONSUMER GOODS</a
+							>
+							<a href="{% url 'analysis2' 'SERVICES' %}" class="dropdown-item"
+								>SERVICES</a
+							>
+							<a
+								href="{% url 'analysis2' 'OIL & GAS' %}  "
+								class="dropdown-item"
+								>OIL & GAS</a
+							>
+							<a href="{% url 'analysis2' 'TELECOM' %}" class="dropdown-item"
+								>TELECOM</a
+							>
+							<a href="{% url 'analysis2' 'PHARMA' %}" class="dropdown-item"
+								>PHARMA</a
+							>
+							<a href="{% url 'analysis2' 'METALS' %}" class="dropdown-item"
+								>METALS</a
+							>
+							<a
+								href="{% url 'analysis2' 'CEMENT & CEMENT PRODUCTS' %}"
+								class="dropdown-item"
+								>CEMENT & CEMENT PRODUCTS</a
+							>
+							<a href="{% url 'analysis2' 'IT' %}" class="dropdown-item">IT</a>
+							<a
+								href="{% url 'analysis2' 'CONSTRUCTION' %}"
+								class="dropdown-item"
+								>CONSTRUCTION</a
+							>
+							<a href="{% url 'analysis2' 'POWER' %}" class="dropdown-item"
+								>POWER</a
+							>
+							<a
+								href="{% url 'analysis2' 'FERTILISERS & PESTICIDES' %}"
+								class="dropdown-item"
+								>FERTILISERS & PESTICIDES</a
+							>
+							<a
+								href="{% url 'analysis2' 'MEDIA  & ENTERTAINMENT' %}"
+								class="dropdown-item"
+								>MEDIA & ENTERTAINMENT</a
+							>
+							<a href="{% url 'analysis2' 'TEXTILES' %}" class="dropdown-item"
+								>TEXTILES</a
+							>
+							<a href="{% url 'analysis2' 'CHEMICALS' %}" class="dropdown-item"
+								>CHEMICALS</a
+							>
+							<a href="{% url 'analysis2' 'PAPER' %}" class="dropdown-item"
+								>PAPER</a
+							>
+						</div>
+					</li>
+					<li class="nav-item dropdown border rounded mx-2">
+						<a
+							class="nav-link dropdown-toggle"
+							href="#"
+							id="navbarDropdown"
+							role="button"
+							data-toggle="dropdown"
+							aria-haspopup="false"
+							aria-expanded="true"
+						>
+							{{user.username}}
+						</a>
+						<div
+							class="dropdown-menu dropdown-menu-right"
+							aria-labelledby="navbarDropdown"
+						>
+							<a
+								href="#"
+								onclick="$('#signOutBtn').click()"
+								class="dropdown-item"
+								>Logout</a
+							>
+							<form
+								style="display: none"
+								method="POST"
+								action="{% url 'logoutuser' %}"
+							>
+								{% csrf_token %}
+								<button id="signOutBtn" type="submit">Logout</button>
+							</form>
+							<a href="{% url 'reset_password' %}" class="dropdown-item"
+								>Change Password</a
+							>
+						</div>
+					</li>
+					{% else %}
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'signupuser' %}">Sign Up</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'loginuser' %}">Login</a>
+					</li>
+					{% endif %}
+				</ul>
+			</div>
+			<!-- </div> -->
+		</nav>
+
+		<div class="container-fluid">{% block content %} {% endblock %}</div>
+
+		<!-- Optional JavaScript -->
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+		<script
+			src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+			integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+			integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+			integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+			crossorigin="anonymous"
+		></script>
+	</body>
+</html>

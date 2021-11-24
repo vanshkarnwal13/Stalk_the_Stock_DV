@@ -1,0 +1,86 @@
+{% extends "core/base.html" %} {% block content %}
+<div class="row justify-content-center mt-5">
+  <div class="col-md-5">
+    <h2>Get a Premium Account</h2>
+  </div>
+</div>
+<div class="row justify-content-center mt-5">
+  <div class="col-md-5">
+    {% if error %}
+    <div class="alert alert-danger" role="alert">{{ error }}</div>
+    {% endif %}
+    <form method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <div class="form-row">
+          <div class="col">
+            <label for="FName">First name</label>
+            <input
+              name="fname"
+              type="text"
+              class="form-control"
+              placeholder="First name"
+            />
+          </div>
+          <div class="col">
+            <label for="LName">Last name</label>
+            <input
+              name="lname"
+              type="text"
+              class="form-control"
+              placeholder="Last name"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email">Contact no.</label>
+        <input
+          name="contact"
+          type="tel"
+          class="form-control"
+          id="name"
+          aria-describedby="emailHelp"
+          placeholder="eg: +919405852531"
+        />
+        <small id="emailHelp" class="form-text text-muted"
+          >We'll let you know if the email has already registered .</small
+        >
+      </div>
+      <div class="form-group">
+        <label for="password1">Purpose</label>
+        <select class="custom-select" name="purpose">
+          <option selected>Your Primary use</option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="password2">City</label>
+        <select class="custom-select" name="city">
+          <option selected>Select a city</option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="password2">Plan</label>
+        <select class="custom-select" name="plan">
+          <option selected>Select a Plan</option>
+          <option value="Monthly">Monthly</option>
+          <option value="Half Yearly">Half Yearly</option>
+          <option value="Yearly">Yearly</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Proceed to Payment</button>
+    </form>
+    <hr />
+    <div class="text-center">
+      Do you already have an account?
+      <a href="{% url 'loginuser' %}">Login here</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

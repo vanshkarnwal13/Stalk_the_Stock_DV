@@ -1,0 +1,175 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.min.css'>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
+
+<section class="pt-5 pb-5">
+  <div class="container">
+    <div class="row">
+        <div class="col-6">
+            <h3 class="mb-3">Carousel cards title </h3>
+        </div>
+        <div class="col-6 text-right">
+            <a class="btn btn-primary mb-3 mr-1" href="#carouselExampleIndicators2" role="button" data-slide="prev">
+                <i class="fa fa-arrow-left"></i>
+            </a>
+            <a class="btn btn-primary mb-3 " href="#carouselExampleIndicators2" role="button" data-slide="next">
+                <i class="fa fa-arrow-right"></i>
+            </a>
+        </div>
+        <div class="col-12">
+            <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row">
+                            {% for key,value in indices1.items %}
+                            <div class="col-md-3 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">{{key}}</h4>
+                                        <p class="card-text"><h6>{{ value.lastPrice }}</h6>
+                                        {% if value.pChange < 0 %}
+                                        <span style="color: rgb(255, 74, 74);">{{ value.change }} ({{ value.pChange }}%)</span></p>
+                                        {% else %}
+                                        <span style="color: green;">{{ value.change }} ({{ value.pChange }}%)</span></p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row">
+                            {% for key,value in indices2.items %}
+                            <div class="col-md-3 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">{{key}}</h4>
+                                        <p class="card-text"><h6>{{ value.lastPrice }}</h6>
+                                            {% if value.pChange < 0 %}
+                                            <span style="color: rgb(255, 74, 74);">{{ value.change }} ({{ value.pChange }}%)</span></p>
+                                            {% else %}
+                                            <span style="color: green;">{{ value.change }} ({{ value.pChange }}%)</span></p>
+                                            {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+
+
+
+
+<main>
+
+    <h1>Stock <datagrid></datagrid></h1>
+    <table id="table" 
+    data-toggle="table"
+    data-pagination="true"
+    data-search="true"
+    data-filter-control="true" 
+    data-click-to-select="true"
+    data-toolbar="#toolbar"
+class="table-responsive">
+        <thead>
+            <tr>
+                <th data-sortable="true">Symbol</th>
+                <th data-sortable="true">Open</th>
+                <th data-sortable="true">High</th>
+                <th data-sortable="true">Low</th>
+                <th data-sortable="true">Adj Close</th>
+                <th data-sortable="true">Volume</th>
+                <th data-sortable="true">EkDinKaGame</th>
+                <th>52W H</th>
+                <th>52W L</th>
+                <th>10D H</th>
+                <th>10D L</th>
+                <th>1M Avg Volume</th>
+                <th>Volume Multiplier</th>
+                <th>T.Zone</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for key, values in stocks.items %}       
+            <tr>
+                <td data-label="key">
+                    {{key}}
+                </td>
+                <td data-label="key">
+                    {{values.Open}}
+                </td>
+                <td data-label="key">
+                    {{values.High}}
+                </td>
+                <td data-label="key">
+                    {{values.Low}}
+                </td>
+                <td data-label="key">
+                    {{values.Close}}
+                </td>
+                <td data-label="key">
+                    {{values.Volume}}
+                </td>
+                <td data-label="key">
+                    {{values.EkDinKaGame}}
+                </td>
+                <td data-label="key">
+                    {{values.52WH}}
+                </td>
+                <td data-label="key">
+                    {{values.52WL}}
+                </td>
+                <td data-label="key">
+                    {{values.10DH}}
+                </td>
+                <td data-label="key">
+                    {{values.10DL}}
+                </td>
+                <td data-label="key">
+                    {{values.1MAV}}
+                </td>
+                <td data-label="key">
+                    {{values.VM}}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    
+
+<script>
+      var $table = $('#table');
+    $(function () {
+        $('#toolbar').find('select').change(function () {
+            $table.bootstrapTable('destroy').bootstrapTable({
+                exportDataType: $(this).val(),
+                exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel', 'pdf']
+            });
+        });
+    })
+
+		var trBoldBlue = $("table");
+
+	$(trBoldBlue).on("click", "tr", function (){
+			$(this).toggleClass("bold-blue");
+	});
+        </script>
+
+{% endblock %}

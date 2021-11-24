@@ -1,0 +1,10 @@
+venv
+streamlit_pages
+core/swaruptmd.csv
+core/options_chain_swarup_tmd.csv
+core/sector_wise_returns_data.csv
+core/config.yml
+core/StocksandSector.csv
+core/cash_market.csv
+core/data_etl.py
+data/
