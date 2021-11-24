@@ -404,7 +404,7 @@ def generate_analysis1(ticker):
 
     " " "### Percentage of change in Closing price of share" " "
     plotly_figure3 = px.histogram(
-        data_frame=data, x=data["Percent_Change_close"], height=400
+        data_frame=data, x=data["TIMESTAMP"], y=data["Percent_Change_close"], height=400
     )
     plotly_figure3.update_xaxes(
         rangeselector=dict(
@@ -428,7 +428,7 @@ def generate_analysis1(ticker):
 
     " " "### Percentage of change in Opening price of share" " "
     plotly_figure4 = px.histogram(
-        data_frame=data, x=data["Percent_Change_open"], height=400
+        data_frame=data, x=data["TIMESTAMP"], y=data["Percent_Change_open"], height=400
     )
     plotly_figure4.update_xaxes(
         rangeselector=dict(
@@ -452,7 +452,7 @@ def generate_analysis1(ticker):
 
     " " "### Percentage of change in Opening and close price of share" " "
     plotly_figure5 = px.histogram(
-        data_frame=data, x=data["Percent_Change_day"], height=400
+        data_frame=data, x=data["TIMESTAMP"], y=data["Percent_Change_day"], height=400
     )
     plotly_figure5.update_xaxes(
         rangeselector=dict(
