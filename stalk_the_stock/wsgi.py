@@ -1,5 +1,5 @@
 """
-WSGI config for Stocker2V project.
+WSGI config for stalk_the_stock project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Stocker2V.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "stalk_the_stock.settings")
 
 application = get_wsgi_application()

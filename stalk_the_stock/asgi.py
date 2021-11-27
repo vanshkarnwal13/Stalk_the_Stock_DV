@@ -1,5 +1,5 @@
 """
-ASGI config for Stocker2V project.
+ASGI config for stalk_the_stock project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Stocker2V.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "stalk_the_stock.settings")
 
 application = get_asgi_application()
