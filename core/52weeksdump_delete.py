@@ -20,5 +20,3 @@ db = client[database]
 dump_to_db = db[dump_52wk]
 
 dump_to_db.delete_many({})
-
-

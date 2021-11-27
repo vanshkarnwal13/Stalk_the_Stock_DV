@@ -531,24 +531,10 @@ def generate_analysis1(ticker):
     plotly_figure7 = go.Figure(
         data=go.Heatmap(df_to_plotly(Probability_df.set_index("Year")))
     )
-    # plotly_figure7=px.line(data,x ="TIMESTAMP",y="Continuous_%change_close")
-    plotly_figure7.update_xaxes(
-        rangeselector=dict(
-            buttons=list(
-                [
-                    dict(count=1, label="1m", step="month", stepmode="backward"),
-                    dict(count=6, label="6m", step="month", stepmode="backward"),
-                    dict(count=1, label="YTD", step="year", stepmode="todate"),
-                    dict(count=1, label="1y", step="year", stepmode="backward"),
-                    dict(step="all"),
-                ]
-            )
-        )
-    )
     plotly_figure7.update_layout(
-        title="Plot Title",
-        xaxis_title="X Axis Title",
-        yaxis_title="Y Axis Title",
+        title="Weekdays Probability",
+        xaxis_title="Weekdays",
+        yaxis_title="Year",
         font=dict(family="sans serif, monospace", size=15, color="RebeccaPurple"),
     )
 
@@ -576,6 +562,7 @@ def generate_analysis1(ticker):
 
     monthly_df = monthly_data(data)
     final_years = monthly_df[["Year", "Months", "%Change_Closing_Price"]]
+    print(final_years)
     pivot_table = final_years.pivot(
         index="Year", columns="Months", values="%Change_Closing_Price"
     )
@@ -716,7 +703,7 @@ def generate_analysis2(sec):
     )
     fig1 = go.Figure(data=go.Heatmap(df_to_plotly(pivot_table), colorscale="Viridis"))
     fig1.update_layout(
-        height=300,
+        height=800,
         font=dict(size=10),
         xaxis=dict(tickmode="linear"),
         yaxis=dict(tickmode="linear"),
@@ -735,24 +722,23 @@ def generate_analysis2(sec):
         )
     )
     fig1.update_layout(
-        title="Plot Title",
-        xaxis_title="X Axis Title",
-        yaxis_title="Y Axis Title",
+        title="Sectorwise %Change of Closing Price (Yearly)",
+        xaxis_title="Year",
+        yaxis_title="Stocks",
         font=dict(family="sans serif, monospace", size=15, color="RebeccaPurple"),
     )
 
     monthly_df = sector_wise_monthly_returns(sector, sec)
     year_v = monthly_df["Year"].unique()
-    print(year_v)
-    year_d = start_date.year
+    year_d = 2021
     final_years = monthly_df[monthly_df["Year"] == year_d]
     pivot_table = final_years.pivot(
         index="Symbol", columns="Months", values="%Change_Closing_Price"
     )
-    print(pivot_table)
+    print("+++++++++++++++++++++", monthly_df)
     fig2 = go.Figure(data=go.Heatmap(df_to_plotly(pivot_table), colorscale="Viridis"))
     fig2.update_layout(
-        height=300,
+        height=800,
         font=dict(size=10),
         xaxis=dict(tickmode="linear"),
         yaxis=dict(tickmode="linear"),
@@ -771,13 +757,9 @@ def generate_analysis2(sec):
         )
     )
     fig2.update_layout(
-        title="Plot Title",
-        xaxis_title="X Axis Title",
-        yaxis_title="Y Axis Title",
+        title="Sectorwise %Change of Closing Price (Monthly)",
+        xaxis_title="Months",
+        yaxis_title="Stocks",
         font=dict(family="sans serif, monospace", size=15, color="RebeccaPurple"),
     )
     return fig1, fig2
-
-
-def generate_analysis3(ticker):
-    return

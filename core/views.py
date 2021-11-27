@@ -17,15 +17,12 @@ import pandas as pd
 from pandas_datareader import data as pdr
 from django.conf import settings
 import datetime
-from .Forms import UserForm
-from .models import UserDetail, transaction
 from bs4 import BeautifulSoup
 import requests
 from .graphPlots import (
     load_data_realtime,
     generate_analysis1,
     generate_analysis2,
-    generate_analysis3,
 )
 import logging
 import adal
@@ -37,16 +34,6 @@ get_settings()
 date = datetime.date.today()
 log = logging.getLogger()
 log.debug("Env vars: \n" + str(os.getenv))
-
-
-def get_plan(req):
-    try:
-        plan = UserDetail.objects.get(user=req.user)
-        plan = plan.subscribed
-        print(plan)
-        return plan
-    except:
-        return False
 
 
 # landing page
@@ -140,10 +127,8 @@ def logoutuser(request):
 
 
 # realtime stockdata table
-@login_required
 def stockdata(request):
     print("starting.......")
-    plan = get_plan(request)
     stock_symbols = pd.read_csv(
         os.path.join(settings.BASE_DIR, "core", "stock_symbols.csv")
     )
@@ -193,81 +178,12 @@ def stockdata(request):
     return render(
         request,
         "core/stockdata.html",
-        {"stocks": res_without_NS, "date": date, "plan": plan},
+        {"stocks": res_without_NS, "date": date},
     )
 
 
-def stockdatagame(request):
-    plan = get_plan(request)
-    stock_symbols = pd.read_csv(
-        os.path.join(settings.BASE_DIR, "core", "stock_symbols.csv")
-    )
-    all_stock_codes = stock_symbols.Symbol.tolist()
-    all_tickers = [x + ".NS" for x in all_stock_codes[0:50]]
-    all_tickers = ",".join([elem for elem in all_tickers])
-
-    yf.pdr_override()
-    data = pdr.get_data_yahoo(
-        tickers=all_tickers,
-        period="1d",
-        interval="1d",
-        group_by="ticker",
-        threads=False,
-    )
-    data.reset_index(drop=True, inplace=True)
-    try:
-        data = data.drop(1)
-    except:
-        pass
-    data = data.stack()
-    reset_df = data.reset_index()
-    reset_df = reset_df.set_index("level_1")
-    reset_df = reset_df.drop("level_0", axis=1)
-    data = reset_df
-
-    res = data.to_json(orient="columns", double_precision=2)
-    res = json.loads(res)
-    res_without_NS = dict()
-    for key, value in res.items():
-        t = key.split(".")
-        data = load_data_realtime("dump_52wk", t[0])
-        try:
-            # value["perChange"]=
-            value["52WH"] = data["52WKH"].values[0]
-            value["52WL"] = data["52WKL"].values[0]
-            value["10DH"] = data["10DH"].values[0]
-            value["10DL"] = data["10DL"].values[0]
-            value["1MAV"] = int(data["1MV"].values[0])
-            value["VM"] = int(value["Volume"] / value["1MAV"])
-        except:
-            value["52WH"] = 0
-            print("data not found")
-        if value["Open"] == value["Low"] and value["High"] == value["Close"]:
-            value["EkDinKaGame"] = "Shivaji"
-        elif value["Open"] == value["High"] and value["Low"] == value["Close"]:
-            value["EkDinKaGame"] = "Akbar"
-        elif 0.2 >= abs(value["Open"] - value["Close"]) / value["Close"] >= 0:
-            value["EkDinKaGame"] = "Krishna"
-        elif (value["Open"] - value["Low"]) / (value["Close"] - value["Open"]) >= 2:
-            value["EkDinKaGame"] = "Umbrella"
-        else:
-            value["EkDinKaGame"] = "Swarup"
-        df_sec = stock_symbols[stock_symbols["Symbol"] == t[0]]
-        value["Sector"] = df_sec.iloc[0].at["Industry"]
-        res_without_NS[t[0]] = value
-
-    return render(
-        request,
-        "core/EkDinKaGame.html",
-        {"stocks": res_without_NS, "date": date, "plan": plan},
-    )
-
-
-@login_required
 def graphs(request, ticker):
     print("graphs loading.....")
-    plan = get_plan(request)
-
     dataInf = yf.Ticker(ticker + ".NS")
     data = yf.download(
         tickers=ticker + ".NS",
@@ -476,7 +392,6 @@ def graphs(request, ticker):
         request,
         "core/graphs.html",
         {
-            "plan": plan,
             "date": date,
             "info": info,
             # "financial_dataframe":financial_dataframe,
@@ -498,51 +413,7 @@ def graphs(request, ticker):
     # return render(request, "core/graphs.html", context={"plot_div": plot_div,"info":dataInf.info,"date": date})
 
 
-def premium(request):
-    if request.method == "GET":
-        return render(request, "core/premium.html", {"date": date})
-    else:
-        try:
-            form = UserForm(request.POST)
-            if form.is_valid():
-                data = form.cleaned_data
-                print(data)
-            else:
-                data = form.errors.as_json()
-                print(data)
-            newdata = form.save(commit=False)
-            newdata.user = request.user
-            newdata.save()
-            return redirect("transaction")
-        except ValueError:
-            return render(
-                request,
-                "core/premium.html",
-                {"form": UserForm(), "error": "Wrong data put in. Try Again"},
-            )
-
-
-def transaction_form(request):
-    if request.method == "GET":
-        return render(request, "core/transaction.html", {"date": date})
-    else:
-        transactionID = request.POST.get("transactionID")
-        amount = request.POST.get("transaction_amount")
-        transaction_type = request.POST.get("transaction_type")
-        transaction_instance = transaction(
-            transactionID=transactionID,
-            user=request.user,
-            transaction_amount=amount,
-            transaction_type=transaction_type,
-        )
-        transaction_instance.save()
-        return redirect("stockdata")
-
-
-@cache_page(60 * 15)
 def analysis1(request, ticker):
-    plan = get_plan(request)
-
     (
         plotly_figure1,
         plotly_figure2,
@@ -570,7 +441,6 @@ def analysis1(request, ticker):
         "core/analysis1.html",
         context={
             "date": date,
-            "plan": plan,
             "plot_div1": plot_div1,
             "plot_div2": plot_div2,
             "plot_div3": plot_div3,
@@ -586,7 +456,6 @@ def analysis1(request, ticker):
 
 
 def analysis2(request, sec):
-    plan = get_plan(request)
     (
         plotly_figure1,
         plotly_figure2,
@@ -599,22 +468,7 @@ def analysis2(request, sec):
         "core/analysis1.html",
         context={
             "date": date,
-            "plan": plan,
             "plot_div1": plot_div1,
             "plot_div2": plot_div2,
         },
     )
-
-
-def EkDinKaGame(request, ticker):
-    plan = get_plan(request)
-    dataInf = yf.Ticker(ticker + ".NS")
-    stock = dataInf.info
-    return render(request, "core/EkDinKaGame.html")
-
-
-def global_indices(request):
-    plan = get_plan(request)
-    return render(request, "core/major_indices.html", {"date": date, "plan": plan})
-
-
